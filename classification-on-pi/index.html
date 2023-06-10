@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Your FridgeFriend™</title>
+
+    <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+
+    <script type="module" src="../includes/js/classification.js"></script>
+    <style></style>
+</head>
+<body>
+<h2>Classification Page</h2>
+<h3>On this page you can see what the model sees</h3>
+
+<video id="video" width="200" height="200" autoplay></video>
+
+<h6><span id="loading">Loading base model...</span> | <span id="video-status">Loading video...</span></h6>
+
+    <p>
+        My guess is: <span id="result">...</span>
+        , with a confidence of <span id="confidence">...</span>.
+    </p>
+</body>
+</html>
