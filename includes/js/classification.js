@@ -2,21 +2,20 @@
 const video = document.getElementById('video'); // Video element
 const videoStatus = document.getElementById('video-status'); // Element to display video status
 const loading = document.getElementById('loading'); // Element to display loading status
-const startStopButton = document.getElementById('start-stop-button')
+const startStopButton = document.getElementById('start-stop-button');
 
-const errorSound = document.getElementById('error-sound')
-const successSound = document.getElementById('success-sound')
+const errorSound = document.getElementById('error-sound');
+const successSound = document.getElementById('success-sound');
 
-let classifying = false
+let classifying = false;
 
 let latestClassifiedLabels = [];
 const labelThreshold = 120; // Number of times the label should occur before updating the database
 const labelLimit = 150; // Limits the length of latestClassifiedLabels
 
-
 // Create a webcam capture
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({video: true}).then(function (stream) {
+    navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
         video.srcObject = stream;
         video.onloadedmetadata = () => {
             video.play();
@@ -25,49 +24,49 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 }
 
 // A function to be called when the model has been loaded
-function modelLoaded() {
+function ModelLoaded() {
     loading.innerText = 'Model loaded!';
     classifier.load('./model/model.json', function () {
-        loading.innerText = "Model and custom model loaded!";
-        startStopButton.addEventListener('click', toggleClassification)
-    })
+        loading.innerText = 'Model and custom model loaded!';
+        startStopButton.addEventListener('click', ToggleClassification);
+    });
 }
 
-function toggleClassification() {
+function ToggleClassification() {
     if (classifying) {
-        classifying = false
+        classifying = false;
         startStopButton.innerHTML = 'Start Classifying';
-        startStopButton.classList.replace('btn-danger', 'btn-primary')
+        startStopButton.classList.replace('btn-danger', 'btn-primary');
     } else {
-        classifying = true
+        classifying = true;
         startStopButton.innerHTML = 'Stop Classifying';
-        startStopButton.classList.replace('btn-primary', 'btn-danger')
-        classifier.classify(gotResults);
+        startStopButton.classList.replace('btn-primary', 'btn-danger');
+        classifier.classify(GotResults);
     }
-
 }
 
 // Extract the already learned features from MobileNet
-const featureExtractor = ml5.featureExtractor('MobileNet', modelLoaded);
+const featureExtractor = ml5.featureExtractor('MobileNet', ModelLoaded);
 // Create a new classifier using those features
-const classifier = featureExtractor.classification(video, videoReady);
+const classifier = featureExtractor.classification(video, VideoReady);
 
 // A function to be called when the video is finished loading
-function videoReady() {
+function VideoReady() {
     videoStatus.innerText = 'Video ready!';
 }
 
 // Show the results
-function gotResults(err, results) {
+function GotResults(err, results) {
     // Display any error
     if (err) {
+        errorSound.play();
         console.error(err);
     }
     if (results && results[0]) {
         result.innerText = results[0].label;
         confidence.innerText = results[0].confidence;
 
-        const classifiedLabel = results[0].label
+        const classifiedLabel = results[0].label;
 
         // Update label counts
         latestClassifiedLabels.push(classifiedLabel);
@@ -75,24 +74,21 @@ function gotResults(err, results) {
         // Check if the label count threshold is reached
         if (latestClassifiedLabels.length >= labelLimit) {
             if (latestClassifiedLabels.filter(label => label === classifiedLabel).length > labelThreshold) {
-                console.log('wow i`m in here')
-
                 // Update the database
-                updateDatabase(classifiedLabel);
+                UpdateDatabase(classifiedLabel);
 
                 latestClassifiedLabels = [];
             }
-            latestClassifiedLabels.shift()
+            latestClassifiedLabels.shift();
         }
 
-
         if (classifying) {
-            classifier.classify(gotResults);
+            classifier.classify(GotResults);
         }
     }
 }
 
-function updateDatabase(label) {
+function UpdateDatabase(label) {
     const url = '../includes/back-end-handlers/recognition-handler.php';
 
     fetch(url, {
@@ -106,15 +102,16 @@ function updateDatabase(label) {
             if (response.ok) {
                 return response.text();
             } else {
-                errorSound.play()
+                errorSound.play();
                 throw new Error('Error updating label');
             }
         })
         .then(responseText => {
+            successSound.play();
             console.log(responseText);
         })
         .catch(error => {
-            errorSound.play()
+            errorSound.play();
             console.error(error);
         });
 }
