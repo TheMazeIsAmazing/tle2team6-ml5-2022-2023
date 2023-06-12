@@ -36,17 +36,17 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 }
 
 // A function to be called when the model has been loaded
-function modelLoaded() {
+function ModelLoaded() {
     loading.innerText = 'Model loaded!';
 }
 
 // Extract the already learned features from MobileNet
-const featureExtractor = ml5.featureExtractor('MobileNet', modelLoaded);
+const featureExtractor = ml5.featureExtractor('MobileNet', ModelLoaded);
 // Create a new classifier using those features
-const classifier = featureExtractor.classification(video, videoReady);
+const classifier = featureExtractor.classification(video, VideoReady);
 
 // A function to be called when the video is finished loading
-function videoReady() {
+function VideoReady() {
     videoStatus.innerText = 'Video ready!';
 }
 
@@ -69,7 +69,7 @@ saveButton.onclick = function () {
 };
 
 // Show the results
-function gotResults(err, results) {
+function GotResults(err, results) {
     // Display any error
     if (err) {
         console.error(err);
@@ -77,19 +77,19 @@ function gotResults(err, results) {
     if (results && results[0]) {
         result.innerText = results[0].label;
         confidence.innerText = results[0].confidence;
-        classifier.classify(gotResults);
+        classifier.classify(GotResults);
     }
 }
 
 // Start predicting when the predict button is clicked
 predict.onclick = function () {
-    classifier.classify(gotResults);
+    classifier.classify(GotResults);
 };
 
 // Event listeners for adding new data
-addImageButton.addEventListener('click', addNewImage);
+addImageButton.addEventListener('click', AddNewImage);
 
-function addNewImage(e) {
+function AddNewImage(e) {
     e.preventDefault();
 
     // Use existing product information
@@ -104,10 +104,10 @@ function addNewImage(e) {
         document.getElementById('hidden-if-data').style.display = 'none';
     }
 
-    trainingSourceHanlder(productInformation)
+    TrainingSourceHandler(productInformation)
 }
 
-function trainingSourceHanlder(productInformation) {
+function TrainingSourceHandler(productInformation) {
     if (trainingSource !== 'image') {
         // Add image from video to the classifier
         classifier.addImage(video, productInformation);

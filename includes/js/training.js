@@ -39,17 +39,17 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 }
 
 // A function to be called when the model has been loaded
-function modelLoaded() {
+function ModelLoaded() {
     loading.innerText = 'Model loaded!';
 }
 
 // Extract the already learned features from MobileNet
-const featureExtractor = ml5.featureExtractor('MobileNet', modelLoaded);
+const featureExtractor = ml5.featureExtractor('MobileNet', ModelLoaded);
 // Create a new classifier using those features
-const classifier = featureExtractor.classification(video, videoReady);
+const classifier = featureExtractor.classification(video, VideoReady);
 
 // A function to be called when the video is finished loading
-function videoReady() {
+function VideoReady() {
     videoStatus.innerText = 'Video ready!';
 }
 
@@ -72,7 +72,7 @@ saveButton.onclick = function () {
 };
 
 // Show the results
-function gotResults(err, results) {
+function GotResults(err, results) {
     // Display any error
     if (err) {
         console.error(err);
@@ -80,20 +80,20 @@ function gotResults(err, results) {
     if (results && results[0]) {
         result.innerText = results[0].label;
         confidence.innerText = results[0].confidence;
-        classifier.classify(gotResults);
+        classifier.classify(GotResults);
     }
 }
 
 // Start predicting when the predict button is clicked
 predict.onclick = function () {
-    classifier.classify(gotResults);
+    classifier.classify(GotResults);
 };
 
 // Event listeners for adding new data
-addInfoButton.addEventListener('click', addNewClass);
-addImageButton.addEventListener('click', addNewImage);
+addInfoButton.addEventListener('click', AddNewClass);
+addImageButton.addEventListener('click', AddNewImage);
 
-function addNewClass(e) {
+function AddNewClass(e) {
     e.preventDefault();
 
     // Create a new product information object
@@ -111,11 +111,11 @@ function addNewClass(e) {
         'userId': 0,
     });
 
-    trainingSourceHanlder(productInformation)
+    TrainingSourceHandler(productInformation)
 
     // Check if the option already exists
 
-    if (!doesOptionExists(productInformation)) {
+    if (!DoesOptionExists(productInformation)) {
         // Add a new option to the product selection dropdown
         let option = document.createElement('option');
         let product = JSON.parse(productInformation);
@@ -136,16 +136,16 @@ function addNewClass(e) {
     }
 }
 
-function addNewImage(e) {
+function AddNewImage(e) {
     e.preventDefault();
 
     // Use existing product information
     let productInformation = document.getElementById('item-select').value;
 
-    trainingSourceHanlder(productInformation)
+    TrainingSourceHandler(productInformation)
 }
 
-function trainingSourceHanlder(productInformation) {
+function TrainingSourceHandler(productInformation) {
     let product = JSON.parse(productInformation);
 
     if (trainingSource !== 'image') {
@@ -181,7 +181,7 @@ function trainingSourceHanlder(productInformation) {
 }
 
 // Function to check if the option already exists
-function doesOptionExists(productInformation) {
+function DoesOptionExists(productInformation) {
     let options = document.getElementById('item-select').options;
     for (let i = 0; i < options.length; i++) {
         if (options[i].value === productInformation) {
