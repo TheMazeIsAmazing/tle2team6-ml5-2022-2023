@@ -1,7 +1,3 @@
-import {connection, mysql} from '../db/db'
-
-console.log(connection, mysql)
-
 // Grab all the DOM elements
 const video = document.getElementById('video'); // Video element
 const videoStatus = document.getElementById('video-status'); // Element to display video status
@@ -22,7 +18,7 @@ function modelLoaded() {
     loading.innerText = 'Model loaded!';
     classifier.load('./model/model.json', function() {
         loading.innerText = "Model and custom model loaded!";
-        classifier.classify(gotResults);
+        // classifier.classify(gotResults);
     })
 }
 

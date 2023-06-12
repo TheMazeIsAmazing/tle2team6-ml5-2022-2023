@@ -1,4 +1,4 @@
 /includes/db/db.js
-/node_modules/
 /.idea/
 /.vscode/
+/includes/db/db.php
