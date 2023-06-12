@@ -8,6 +8,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script type="module" src="../includes/js/training.js"></script>
 
+    <!-- Add Bootstrap JS (optional, for certain components) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <!-- Add Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
@@ -30,58 +33,61 @@
                 <a class="nav-link" href="../training">Train algoritme</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="../training-admin">Train algoritme admin</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="../classification-on-pi">Classificeer met algoritme</a>
             </li>
         </ul>
     </div>
 </nav>
 <main>
-    <h2 class="mt-3">Admin Page</h2>
-    <h3>On this page the admin can train and download the model</h3>
+    <h2 class="mt-3">User Page</h2>
+    <h3>On this page the user can train and download the model</h3>
 
     <video id="video" width="200" height="200" autoplay></video>
 
     <h6><span id="loading">Loading base model...</span> | <span id="video-status">Loading video...</span></h6>
     <form id="" class="mt-3">
-        <label for="source">Bron</label><br/>
+        <label for="source">Bron</label>
         <select id="source" class="form-control">
             <option value="image" selected>Afbeeldingen</option>
             <option value="video">Camera</option>
-        </select><br/>
-        <label for="product">Is het product al bekend bij het algoritme?</label><br/>
+        </select>
+        <label for="product">Is het product al bekend bij het algoritme?</label>
         <select id="product" class="form-control">
             <option value="new" selected>Nee, dit is een nieuw product</option>
             <option value="existing">Ja, dit product is al bekend</option>
-        </select><br/>
-        <label id="training-data-label" for="training-data">Kies 1 of meer afbeeldingen</label><br/>
-        <input id="training-data" accept="image/*" type="file" multiple class="form-control"/><br/>
+        </select>
+        <label id="training-data-label" for="training-data">Kies 1 of meer afbeeldingen</label>
+        <input id="training-data" accept="image/*" type="file" multiple class="form-control"/>
 
         <div id="hidden-if-existing">
-            <label for="brand">Merk</label><br/>
-            <input id="brand" type="text" class="form-control"/><br/>
-            <label for="name">Naam</label><br/>
-            <input id="name" type="text" class="form-control"/><br/>
-            <label for="description">Omschrijving</label><br/>
-            <textarea id="description" class="form-control"></textarea><br/>
-            <label for="image">Voorbeeldafbeelding</label><br/>
-            <input id="image" type="text" class="form-control"/><br/>
-            <img id="preview-image" src="" alt="" aria-hidden="true" class="mb-3"><br/>
-            <label for="average-shelf-life-type">Type Houdbaarheidsdatum</label><br/>
+            <label for="brand">Merk</label>
+            <input id="brand" type="text" class="form-control"/>
+            <label for="name">Naam</label>
+            <input id="name" type="text" class="form-control"/>
+            <label for="description">Omschrijving</label>
+            <textarea id="description" class="form-control"></textarea>
+            <label for="image">Voorbeeldafbeelding</label>
+            <input id="image" type="text" class="form-control"/>
+            <img id="preview-image" src="" alt="" aria-hidden="true" class="mb-3">
+            <label for="average-shelf-life-type">Type Houdbaarheidsdatum</label>
             <select id="average-shelf-life-type" class="form-control">
                 <option value="THT" selected>Tenminste Houdbaar tot</option>
                 <option value="TGT">Te Gebruiken Tot</option>
-            </select><br/>
-            <label for="average-shelf-life">Aantal dagen houdbaar na aankoop</label><br/>
-            <input id="average-shelf-life" type="number" class="form-control"/> <span id="date-notation">dagen tot THT-datum</span><br/>
-            <label for="size-type">Type Grootte</label><br/>
+            </select>
+            <label for="average-shelf-life">Aantal dagen houdbaar na aankoop</label>
+            <input id="average-shelf-life" type="number" class="form-control"/> <span id="date-notation">dagen tot THT-datum</span> <br/><br/>
+            <label for="size-type">Type Grootte</label>
             <select id="size-type" class="form-control">
                 <option value="ML" selected>Volume in Milliliters</option>
                 <option value="Gram">Gewicht in gram</option>
-            </select><br/>
-            <label for="size">Grootte</label><br/>
+            </select>
+            <label for="size">Grootte</label>
             <input id="size" type="number" class="form-control"/> <span id="size-notation">ML</span><span
-                id="readable-size"> (= 0L)</span><br/>
-            <label for="product-category">Productcategorie</label><br/>
+                id="readable-size"> (= 0L)</span><br/><br/>
+            <label for="product-category">Productcategorie</label>
             <select id="product-category" class="form-control">
                 <option value="dairy">Zuivel</option>
                 <option value="meat_poultry">Vlees en gevogelte</option>
@@ -93,47 +99,46 @@
                 <option value="sauces_dressings">Sauzen en dressings</option>
                 <option value="leftovers_canned">Restjes en ingeblikt</option>
                 <option value="other">Overig</option>
-            </select><br/>
+            </select>
+
             <br/>
             <button id="add-info-button" class="btn btn-primary">Product Toevoegen aan lijst</button>
-            <br/>
+            
         </div>
         <div id="hidden-if-new">
-            <label for="item-select">Kies hieronder het bestaande product</label><br/>
-            <select id="item-select" class="form-control"></select><br/>
+            <label for="item-select">Kies hieronder het bestaande product</label>
+            <select id="item-select" class="form-control"></select>
+
             <br/>
             <button id="add-image-button" class="btn btn-primary">Afbeelding Toevoegen aan Model</button>
-            <br/>
+            
         </div>
     </form>
     <div id="u-did-it" class="bg-dark mt-3" style="display: none"></div>
-    <br/>
+    
     <div id="hidden-if-data" class="mt-3">
         Trainen kan pas als je tenminste 2 verschillende producten hebt toegevoegd.
     </div>
-    <br/>
+    
     <div id="hidden-if-no-data" style="display: none">
         <p>
             <button id="train" class="btn btn-primary">Train</button>
             <span id="loss"></span></p>
-        <br/>
+        
     </div>
     <div id="hidden-if-not-trained" style="display: none">
         <p>
             <button id="save-button" class="btn btn-primary">Download model.json</button>
         </p>
-        <br/>
+        
         <p>
             <button id="predict" class="btn btn-primary">Start guessing!</button>
-            <br/>
+            
             My guess is: <span id="result">...</span>
             , with a confidence of <span id="confidence">...</span>.
         </p>
     </div>
 </main>
-
-<!-- Add Bootstrap JS (optional, for certain components) -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>
