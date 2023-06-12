@@ -4,12 +4,15 @@ const videoStatus = document.getElementById('video-status'); // Element to displ
 const loading = document.getElementById('loading'); // Element to display loading status
 const startStopButton = document.getElementById('start-stop-button')
 
+const errorSound = document.getElementById('error-sound')
+const successSound = document.getElementById('success-sound')
+
 let classifying = false
 
 let latestClassifiedLabels = [];
-const labelThreshold = 80; // Number of times the label should occur before updating the database
+const labelThreshold = 120; // Number of times the label should occur before updating the database
+const labelLimit = 150; // Limits the length of latestClassifiedLabels
 
-console.log('force')
 
 // Create a webcam capture
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -64,27 +67,19 @@ function gotResults(err, results) {
         result.innerText = results[0].label;
         confidence.innerText = results[0].confidence;
 
-        const classifiedLabel = JSON.parse(results[0].label).id;
-        console.log('Label:', classifiedLabel);
+        const classifiedLabel = results[0].label
 
         // Update label counts
         latestClassifiedLabels.push(classifiedLabel);
 
-        console.log(latestClassifiedLabels)
-        console.log(latestClassifiedLabels.length)
-
         // Check if the label count threshold is reached
-        if (latestClassifiedLabels.length >= 100) {
+        if (latestClassifiedLabels.length >= labelLimit) {
             if (latestClassifiedLabels.filter(label => label === classifiedLabel).length > labelThreshold) {
-                // // Find the most occurring label
-                // const mostOccurringLabel = Object.keys(labelCounts).reduce((a, b) => labelCounts[a] > labelCounts[b] ? a : b);
-                // console.log('Updating database with label:', mostOccurringLabel);
-
-                // // Update the database
-                // updateDatabase(mostOccurringLabel);
                 console.log('wow i`m in here')
 
-                // Reset label counts
+                // Update the database
+                updateDatabase(classifiedLabel);
+
                 latestClassifiedLabels = [];
             }
             latestClassifiedLabels.shift()
@@ -105,12 +100,13 @@ function updateDatabase(label) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({label}),
+        body: JSON.stringify({ label: label }),
     })
         .then(response => {
             if (response.ok) {
                 return response.text();
             } else {
+                errorSound.play()
                 throw new Error('Error updating label');
             }
         })
@@ -118,6 +114,7 @@ function updateDatabase(label) {
             console.log(responseText);
         })
         .catch(error => {
+            errorSound.play()
             console.error(error);
         });
 }

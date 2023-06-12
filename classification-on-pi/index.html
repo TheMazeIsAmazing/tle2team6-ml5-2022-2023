@@ -18,6 +18,9 @@
         main {
             padding: 20px;
         }
+        audio {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -53,6 +56,12 @@
         My guess is: <span id="result">...</span>
         , with a confidence of <span id="confidence">...</span>.
     </p>
+    <audio controls id="error-sound">
+        <source src="../includes/sound-fx/invalid.mp3" type="audio/mpeg">
+    </audio>
+    <audio controls id="success-sound">
+        <source src="../includes/sound-fx/success.mp3" type="audio/mpeg">
+    </audio>
 </main>
 
 </body>
