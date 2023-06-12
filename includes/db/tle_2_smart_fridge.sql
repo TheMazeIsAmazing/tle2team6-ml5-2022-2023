@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 12, 2023 at 02:03 PM
+-- Generation Time: Jun 12, 2023 at 07:33 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -73,7 +73,7 @@ INSERT INTO `products` (`id`, `brand`, `name`, `description`, `image`, `average_
 CREATE TABLE `product_user` (
   `id` int(10) UNSIGNED NOT NULL,
   `product_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -90,6 +90,13 @@ CREATE TABLE `users` (
   `family_size` int(11) DEFAULT NULL,
   `role` tinyint(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `email`, `phone_number`, `password`, `family_size`, `role`) VALUES
+(1, 'name@example.com', '0612345678', 'secure', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -135,7 +142,7 @@ ALTER TABLE `product_user`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
