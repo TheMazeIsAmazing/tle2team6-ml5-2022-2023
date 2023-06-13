@@ -1,11 +1,17 @@
-import {connection, mysql} from '../db/db'
-
-console.log(connection, mysql)
-
 // Grab all the DOM elements
 const video = document.getElementById('video'); // Video element
 const videoStatus = document.getElementById('video-status'); // Element to display video status
 const loading = document.getElementById('loading'); // Element to display loading status
+const startStopButton = document.getElementById('start-stop-button');
+
+const errorSound = document.getElementById('error-sound');
+const successSound = document.getElementById('success-sound');
+
+let classifying = false;
+
+let latestClassifiedLabels = [];
+const labelThreshold = 120; // Number of times the label should occur before updating the database
+const labelLimit = 150; // Limits the length of latestClassifiedLabels
 
 // Create a webcam capture
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -18,33 +24,94 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 }
 
 // A function to be called when the model has been loaded
-function modelLoaded() {
+function ModelLoaded() {
     loading.innerText = 'Model loaded!';
-    classifier.load('./model/model.json', function() {
-        loading.innerText = "Model and custom model loaded!";
-        classifier.classify(gotResults);
-    })
+    classifier.load('./model/model.json', function () {
+        loading.innerText = 'Model and custom model loaded!';
+        startStopButton.addEventListener('click', ToggleClassification);
+    });
+}
+
+function ToggleClassification() {
+    if (classifying) {
+        classifying = false;
+        startStopButton.innerHTML = 'Start Classifying';
+        startStopButton.classList.replace('btn-danger', 'btn-primary');
+    } else {
+        classifying = true;
+        startStopButton.innerHTML = 'Stop Classifying';
+        startStopButton.classList.replace('btn-primary', 'btn-danger');
+        classifier.classify(GotResults);
+    }
 }
 
 // Extract the already learned features from MobileNet
-const featureExtractor = ml5.featureExtractor('MobileNet', modelLoaded);
+const featureExtractor = ml5.featureExtractor('MobileNet', ModelLoaded);
 // Create a new classifier using those features
-const classifier = featureExtractor.classification(video, videoReady);
+const classifier = featureExtractor.classification(video, VideoReady);
 
 // A function to be called when the video is finished loading
-function videoReady() {
+function VideoReady() {
     videoStatus.innerText = 'Video ready!';
 }
 
 // Show the results
-function gotResults(err, results) {
+function GotResults(err, results) {
     // Display any error
     if (err) {
+        errorSound.play();
         console.error(err);
     }
     if (results && results[0]) {
         result.innerText = results[0].label;
         confidence.innerText = results[0].confidence;
-        classifier.classify(gotResults);
+
+        const classifiedLabel = results[0].label;
+
+        // Update label counts
+        latestClassifiedLabels.push(classifiedLabel);
+
+        // Check if the label count threshold is reached
+        if (latestClassifiedLabels.length >= labelLimit) {
+            if (latestClassifiedLabels.filter(label => label === classifiedLabel).length > labelThreshold) {
+                // Update the database
+                UpdateDatabase(classifiedLabel);
+
+                latestClassifiedLabels = [];
+            }
+            latestClassifiedLabels.shift();
+        }
+
+        if (classifying) {
+            classifier.classify(GotResults);
+        }
     }
+}
+
+function UpdateDatabase(label) {
+    const url = '../includes/back-end-handlers/recognition-handler.php';
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ label: label }),
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                errorSound.play();
+                throw new Error('Error updating label');
+            }
+        })
+        .then(responseText => {
+            successSound.play();
+            console.log(responseText);
+        })
+        .catch(error => {
+            errorSound.play();
+            console.error(error);
+        });
 }
