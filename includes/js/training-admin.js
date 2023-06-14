@@ -40,10 +40,13 @@ function ModelLoaded() {
     loading.innerText = 'Model loaded!';
 }
 
+const options = { numLabels: 9 };
+
 // Extract the already learned features from MobileNet
 const featureExtractor = ml5.featureExtractor('MobileNet', ModelLoaded);
 // Create a new classifier using those features
-const classifier = featureExtractor.classification(video, VideoReady);
+const classifier = featureExtractor.classification(video, options, VideoReady);
+
 
 // A function to be called when the video is finished loading
 function VideoReady() {
