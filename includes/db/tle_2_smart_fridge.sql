@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2023 at 07:24 PM
+-- Generation Time: Jun 14, 2023 at 07:31 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -59,6 +59,21 @@ CREATE TABLE `category_product` (
                                     `category_id` int(10) UNSIGNED NOT NULL,
                                     `product_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `category_product`
+--
+
+INSERT INTO `category_product` (`id`, `category_id`, `product_id`) VALUES
+                                                                       (1, 7, 1),
+                                                                       (2, 2, 6),
+                                                                       (3, 1, 3),
+                                                                       (4, 2, 2),
+                                                                       (5, 1, 4),
+                                                                       (6, 1, 5),
+                                                                       (7, 7, 7),
+                                                                       (8, 7, 8),
+                                                                       (9, 1, 9);
 
 -- --------------------------------------------------------
 
@@ -189,7 +204,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `category_product`
 --
 ALTER TABLE `category_product`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `products`
