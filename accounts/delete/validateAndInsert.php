@@ -1,31 +1,43 @@
 <?php
-require_once  './connect.php'; //database conn global file
+require_once  '../includes/db/db.php'; //database conn global file
+/** @var mysqli $db */
 
-$userId = '';
+$userId = testInput('php://input', 'userId');
 
-//dummy method, 
-//idk how ur gonna request the data,
-//so replace all $_POST with appropriate method
 //checks if userId was sent, checks if its integer-only
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userId']) && ctype_digit($_POST['userIdId'])) {
-    $userId = testInput($_POST['customerId']);
+if(isset($userId) && ctype_digit($userId)) {
+
+    //removes column from users table based on given id, 
+    //and also deletes product_user columns associated with said user
+    $sql = sprintf(
+        "DELETE FROM users INNER JOIN product_user WHERE users.id= product_user.user_id and users.id=$userId");
+    
+    try{
+        $result = mysqli_query($db, $sql);
+    
+        if ($result) {
+            http_response_code(200); // Set HTTP response code to 200 (Success)
+            echo 'Relation deleted successfully';
+        } else {
+            http_response_code(500); // Set HTTP response code to 500 (Internal Server Error)
+            echo 'Relation delete unsuccessful';
+        }
+    } catch (Exception $e) {
+        errorHandler($e->getMessage());
+    }
 } else {
-    header("Location: "); //error
+    errorHandler('data parsing error');
 }
 
-//removes column from table based on given id
-$sql = sprintf(
-    "DELETE FROM users WHERE id=$userId");
+function errorHandler($errorMessage) {
+    http_response_code(500); // Set HTTP response code to 500 (Internal Server Error)
+        echo 'An error occurred: ' . $errorMessage;
+}
 
-mysqli_query($conn, $sql) or die('error: '. mysqli_error($conn). ' with query'. $sql);
-
-header("Location: "); //returns to app
-
-//parses input into nonviable characters. 
-//seperate function to allow for additional parsing methods
-function testInput($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
+//parses JSON into seperate strings, and escapes it. 
+function testInput($data, $paramName) {
+    $data = file_get_contents($data);
+    $data = json_decode($data, true)[$paramName];
+    $data = mysqli_escape_string($db, $data);
     return $data;
   }

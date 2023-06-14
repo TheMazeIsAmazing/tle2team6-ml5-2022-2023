@@ -1,5 +1,6 @@
 <?php
-    require_once './connect.php'; //database conn global file
+    require_once  '../includes/db/db.php'; //database conn global file
+    /** @var mysqli $db */
     
     //dummy method, 
     //idk how ur gonna request the data,
@@ -13,10 +14,7 @@
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
         $name = testInput($_POST['name']);
-        $diet = testInput($_POST['diet']);
         $familySize = testInput($_POST['familySize']);
-
-        $accessibilitySettings = testInput($_POST['accessibilitySettings']);
 
         //checks if all fields are entered,
         //if true, loads insert.php to write to db
@@ -24,9 +22,7 @@
             isset($phone) && 
             isset($hash) && 
             isset($name) && 
-            isset($diet) && 
-            isset($familySize) && 
-            isset($accessibilitySettings)) {
+            isset($familySize)) {
                 readfile('insert.php');
         }
     } else { header("Location: ");} //error

@@ -1,5 +1,6 @@
 <?php
-    require_once  './connect.php'; //database conn global file
+    require_once  '../includes/db/db.php'; //database conn global file
+    /** @var mysqli $db */
 
     //dummy method, 
     //idk how ur gonna request the data,

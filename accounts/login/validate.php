@@ -1,45 +1,55 @@
 <?php
-    session_start();
-    require_once './connect.php'; //database conn global file
+require_once  '../includes/db/db.php'; //database conn global file
+/** @var mysqli $db */
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {             //dummy method, 
-        $emailOrPhone = testInput($_POST['emailOrPhone']);  //idk how ur gonna request the data,
-        $password = testInput($_POST['password']);          //so replace all $_POST with appropriate
+$emailOrPhone = testInput('php://input', 'emailOrPhone');  
+$password = testInput('php://input', 'password');
 
-        //validates login info, first checks if entered at all, 
-        //then checks if it matches any users entry in the email OR phone column, 
-        //and returns userdata it if true
-        if (isset($emailOrPhone)){ 
-           $sql = sprintf(
-            "SELECT * FROM users WHERE email='%s' OR phone_number='%s'",
-            $conn->real_escape_string($emailOrPhone),
-            $conn->real_escape_string($emailOrPhone));
 
-            //retrieves pw hash from data, verifies, 
-            //and then enters email and phone into session for later verification
-            $result = $conn->query($sql);
+if (isset($emailOrPhone)){ //validates login info, first checks if entered at all
+$sql = sprintf(
+    "SELECT * FROM users WHERE email=$emailOrPhone OR phone_number=$emailOrPhone"); //checks if it matches any users entry in the email OR phone column,
+
+    //retrieves pw hash from returned data, verifies, 
+    //and then returns email, phone, password to app for later auto-login
+    try{
+        $result = mysqli_query($db, $sql);
+
+        if ($result) {
             $row = $result->fetch_object();
             if ($row != null) {
-                $hash = $row->hash;
+                $hash = $row->password;
                 if (password_verify($password, $hash)){
                     //ROXY TO DO: SESSION SERVERSIDE IS IRRELEVANT. 
                     //CHANGE TO SENDING USER DATA BACK TO APP. 
                     //SO IT CAN BE STORED IN SESSION THERE
-                    $_SESSION['email'] = $row->email;
-                    $_SESSION['phone'] = $row->phone_number;
-                    header("Location: "); //success
+                    
+                    http_response_code(200); // Set HTTP response code to 200 (Success)
+                    echo 'Relation deleted successfully';
                 } else {
-                    header("Location: "); //error
+                    errorHandler('Validation attempt unsuccessful'); //error
                 }
             } else {
-                header("Location: "); //error
-            } 
-        } else { header("Location: ");} //error
-    } else { header("Location: ");} //error
+                errorHandler('Validation attempt unsuccessful'); //error
+            }           
+        } else {
+            errorHandler('Validation attempt unsuccessful'); //error
+        }
+    } catch (Exception $e) {
+        errorHandler($e->getMessage());
+    }
+     
+} else { header("Location: ");} //error
 
-    //parses input into nonviable characters. 
-    //only htmlspecialchars here, seperate function to allow for additional parsing methods
-    function testInput($data) {
-        $data = htmlspecialchars($data);
-        return $data;
-      }
+function errorHandler($errorMessage) {
+    http_response_code(500); // Set HTTP response code to 500 (Internal Server Error)
+        echo 'An error occurred: ' . $errorMessage;
+}
+
+//parses JSON into seperate strings, and escapes it. 
+function testInput($data, $paramName) {
+$data = file_get_contents($data);
+$data = json_decode($data, true)[$paramName];
+$data = mysqli_escape_string($db, $data);
+return $data;
+}
