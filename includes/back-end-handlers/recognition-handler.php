@@ -4,7 +4,7 @@ require_once '../db/db.php';
 
 $label = mysqli_escape_string($db, json_decode(file_get_contents('php://input'), true)['label']); // Get the label from the POST request
 
-$query = "INSERT INTO `product_user` (`product_id`, `user_id`) VALUES ('$label', '0');";
+$query = "INSERT INTO `product_user` (`product_id`, `user_id`) VALUES ('$label', '1');";
 try {
     $result = mysqli_query($db, $query);
 
