@@ -41,3 +41,6 @@ function testInput($data, $paramName) {
     $data = mysqli_escape_string($db, $data);
     return $data;
   }
+
+  // Close the database connection
+$db->close();
