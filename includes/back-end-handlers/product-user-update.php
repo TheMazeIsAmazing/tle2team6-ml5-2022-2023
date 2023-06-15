@@ -27,5 +27,5 @@ if ($productUserId !== null && $productUserId !== '') {
 // Close the database connection
     $db->close();
 } else {
-    http_response_code(400); // Set HTTP response code to 500 (Internal Server Error)
+    http_response_code(400); // Set HTTP response code to 400 (Bad request Error)
 }
