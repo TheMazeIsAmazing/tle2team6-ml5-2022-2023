@@ -1,6 +1,7 @@
 <?php
 require_once  '../includes/db/db.php'; //database conn global file
 /** @var mysqli $db */
+$defaultError = 'Account delete unsuccessful';
 
 $userId = testInput('php://input', 'userId');
 
@@ -19,14 +20,13 @@ if(isset($userId) && ctype_digit($userId)) {
             http_response_code(200); // Set HTTP response code to 200 (Success)
             echo 'Relation deleted successfully';
         } else {
-            http_response_code(500); // Set HTTP response code to 500 (Internal Server Error)
-            echo 'Relation delete unsuccessful';
+            errorHandler($defaultError);
         }
     } catch (Exception $e) {
         errorHandler($e->getMessage());
     }
 } else {
-    errorHandler('data parsing error');
+    errorHandler($defaultError);
 }
 
 function errorHandler($errorMessage) {

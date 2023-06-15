@@ -1,6 +1,7 @@
 <?php
 require_once  '../includes/db/db.php'; //database conn global file
 /** @var mysqli $db */
+$defaultError = 'user data retrieval attempt unsuccessful';
 
 $userId = testInput('php://input', 'userId');
 
@@ -21,10 +22,10 @@ try{
       header('Content-type: application/json');
       echo json_encode($row);
     } else {
-      errorHandler('Validation attempt unsuccessful'); //error
+      errorHandler($defaultError); //error
     }
   } else {
-    errorHandler('Validation attempt unsuccessful'); //error
+    errorHandler($defaultError); //error
   }
 } catch (Exception $e) {
   errorHandler($e->getMessage());

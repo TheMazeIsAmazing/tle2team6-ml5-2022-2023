@@ -1,6 +1,7 @@
 <?php
 require_once  '../includes/db/db.php'; //database conn global file
 /** @var mysqli $db */
+$defaultError = 'Registration attempt unsuccessful';
 
 $email = testInput('php://input', 'email');
 $phone = testInput('php://input', 'phone');
@@ -32,13 +33,12 @@ if (isset($email) &&
                 http_response_code(200); // Set HTTP response code to 200 (Success)
                 echo 'Registered successfully';
             } else {
-                http_response_code(500); // Set HTTP response code to 500 (Internal Server Error)
-                echo 'Registration attempt unsuccessful';
+                errorHandler($defaultError); //error
             }
         } catch (Exception $e) {
             errorHandler($e->getMessage());
         }
-    } else { errorHandler('Registration attempt unsuccessful');} //error
+    } else { errorHandler($defaultError);} //error
 
 function errorHandler($errorMessage) {
     http_response_code(500); // Set HTTP response code to 500 (Internal Server Error)
