@@ -82,17 +82,17 @@ INSERT INTO `category_product` (`id`, `category_id`, `product_id`) VALUES
 --
 
 CREATE TABLE `products` (
-                            `id` int(11) NOT NULL,
-                            `brand` varchar(255) DEFAULT NULL,
-                            `name` varchar(255) NOT NULL,
-                            `description` text NOT NULL,
-                            `image` longblob NOT NULL,
-                            `average_shelf_life` int(11) NOT NULL,
-                            `average_shelf_life_type` tinyint(4) NOT NULL COMMENT '0 - THT\r\n1 - TGT',
-                            `size` int(11) NOT NULL,
-                            `size_type` tinyint(4) NOT NULL COMMENT '0 - Gram\r\n1 - ML',
-                            `status` tinyint(4) NOT NULL COMMENT '0 - Visable to all\r\n1 - Visable to User_id\r\n2 - Visable to beta testers\r\n3 - Visable to none',
-                            `user_id` int(11) NOT NULL
+  `id` int(11) NOT NULL,
+  `brand` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `image` longblob NOT NULL,
+  `average_shelf_life` int(11) NOT NULL,
+  `average_shelf_life_type` tinyint(4) NOT NULL COMMENT '0 - THT\r\n1 - TGT',
+  `size` int(11) NOT NULL,
+  `size_type` tinyint(4) NOT NULL COMMENT '0 - Gram\r\n1 - ML',
+  `status` tinyint(4) NOT NULL COMMENT '0 - Visable to all\r\n1 - Visable to User_id\r\n2 - Visable to beta testers\r\n3 - Visable to none',
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -127,7 +127,9 @@ INSERT INTO `products` (`id`, `brand`, `name`, `description`, `image`, `average_
 CREATE TABLE `product_user` (
   `id` int(10) UNSIGNED NOT NULL,
   `product_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL DEFAULT 0
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `add_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `expiration_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
