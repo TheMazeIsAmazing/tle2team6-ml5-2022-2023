@@ -2,9 +2,9 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jun 14, 2023 at 11:10 AM
--- Server version: 8.0.30
+-- Host: 127.0.0.1
+-- Generation Time: Jun 14, 2023 at 07:31 PM
+-- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -18,8 +18,62 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ml5db`
+-- Database: `tle_2_smart_fridge`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `category`
+--
+
+CREATE TABLE `category` (
+                            `id` int(10) UNSIGNED NOT NULL,
+                            `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`id`, `name`) VALUES
+                                          (1, 'Zuivel'),
+                                          (2, 'Vlees en gevogelte'),
+                                          (3, 'Vis en zeevruchten'),
+                                          (4, 'Eieren'),
+                                          (5, 'Groenten'),
+                                          (6, 'Fruit'),
+                                          (7, 'Dranken'),
+                                          (8, 'Sauzen en dressings'),
+                                          (9, 'Restjes en ingeblikt'),
+                                          (10, 'Overig');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `category_product`
+--
+
+CREATE TABLE `category_product` (
+                                    `id` int(10) UNSIGNED NOT NULL,
+                                    `category_id` int(10) UNSIGNED NOT NULL,
+                                    `product_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `category_product`
+--
+
+INSERT INTO `category_product` (`id`, `category_id`, `product_id`) VALUES
+                                                                       (1, 7, 1),
+                                                                       (2, 2, 6),
+                                                                       (3, 1, 3),
+                                                                       (4, 2, 2),
+                                                                       (5, 1, 4),
+                                                                       (6, 1, 5),
+                                                                       (7, 7, 7),
+                                                                       (8, 7, 8),
+                                                                       (9, 1, 9);
 
 -- --------------------------------------------------------
 
@@ -28,18 +82,18 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `products` (
-                            `id` int NOT NULL,
-                            `brand` varchar(255) DEFAULT NULL,
-                            `name` varchar(255) NOT NULL,
-                            `description` text NOT NULL,
-                            `image` longblob NOT NULL,
-                            `average_shelf_life` int NOT NULL,
-                            `average_shelf_life_type` tinyint NOT NULL COMMENT '0 - THT\r\n1 - TGT',
-                            `size` int NOT NULL,
-                            `size_type` tinyint NOT NULL COMMENT '0 - Gram\r\n1 - ML',
-                            `status` tinyint NOT NULL COMMENT '0 - Visable to all\r\n1 - Visable to User_id\r\n2 - Visable to beta testers\r\n3 - Visable to none',
-                            `user_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` int(11) NOT NULL,
+  `brand` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `image` longblob NOT NULL,
+  `average_shelf_life` int(11) NOT NULL,
+  `average_shelf_life_type` tinyint(4) NOT NULL COMMENT '0 - THT\r\n1 - TGT',
+  `size` int(11) NOT NULL,
+  `size_type` tinyint(4) NOT NULL COMMENT '0 - Gram\r\n1 - ML',
+  `status` tinyint(4) NOT NULL COMMENT '0 - Visable to all\r\n1 - Visable to User_id\r\n2 - Visable to beta testers\r\n3 - Visable to none',
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `products`
@@ -71,12 +125,12 @@ INSERT INTO `products` (`id`, `brand`, `name`, `description`, `image`, `average_
 --
 
 CREATE TABLE `product_user` (
-  `id` int UNSIGNED NOT NULL,
-  `product_id` int NOT NULL,
-  `user_id` int NOT NULL DEFAULT '0',
+  `id` int(10) UNSIGNED NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL DEFAULT 0,
   `add_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `expiration_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -85,13 +139,13 @@ CREATE TABLE `product_user` (
 --
 
 CREATE TABLE `users` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `phone_number` varchar(45) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `family_size` int DEFAULT NULL,
-  `role` tinyint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `family_size` int(11) DEFAULT NULL,
+  `role` tinyint(4) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
@@ -103,6 +157,20 @@ INSERT INTO `users` (`id`, `email`, `phone_number`, `password`, `family_size`, `
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `category`
+--
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `category_product`
+--
+ALTER TABLE `category_product`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `category_id` (`category_id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indexes for table `products`
@@ -129,26 +197,45 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `category`
+--
+ALTER TABLE `category`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `category_product`
+--
+ALTER TABLE `category_product`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `product_user`
 --
 ALTER TABLE `product_user`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `category_product`
+--
+ALTER TABLE `category_product`
+  ADD CONSTRAINT `category_product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `category_product_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `product_user`

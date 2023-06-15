@@ -3,8 +3,10 @@ require_once '../db/db.php';
 /** @var mysqli $db */
 
 $label = mysqli_escape_string($db, json_decode(file_get_contents('php://input'), true)['label']); // Get the label from the POST request
+$userId = mysqli_escape_string($db, json_decode(file_get_contents('php://input'), true)['userId']); // Get the userId from the POST request
 
-$query = "INSERT INTO `product_user` (`product_id`, `user_id`) VALUES ('$label', '0');";
+$query = "INSERT INTO `product_user` (`product_id`, `user_id`) VALUES ('$label', '$userId');";
+
 try {
     $result = mysqli_query($db, $query);
 
