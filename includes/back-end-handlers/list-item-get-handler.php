@@ -4,11 +4,11 @@ require_once '../db/db.php';
 
 // $userId = mysqli_escape_string($db, json_decode(file_get_contents('php://input'), true)['userId']); // Get the label from the POST request
 
-$query = "SELECT product_user.id, product_user.product_id, products.name, products.average_shelf_life
+$query = "SELECT product_user.id, product_user.product_id, product_user.add_date, products.name, products.average_shelf_life
 FROM product_user
 INNER JOIN products ON product_user.product_id=products.id
 WHERE product_user.user_id=1
-ORDER BY product_user.product_id ASC";
+ORDER BY product_user.product_id ASC, product_user.add_date ASC";
 try {
     $result = mysqli_query($db, $query);
 
