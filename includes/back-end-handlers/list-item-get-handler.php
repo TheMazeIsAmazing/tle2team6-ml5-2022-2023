@@ -16,7 +16,7 @@ try {
 
     if ($result) {
         while($row = $result->fetch_assoc()){
-            $newDate = date('Y-m-d', strtotime($row["add_date"]. ' +' .$row["average_shelf_life"]. ' days'));
+            $newDate = date('d-m-Y', strtotime($row["add_date"]. ' +' .$row["average_shelf_life"]. ' days'));
             $row["expiration_date"] = $newDate;
             array_push($products, $row);
         }
