@@ -11,7 +11,7 @@ if(isset($userId) && ctype_digit($userId)) {
     //removes column from users table based on given id, 
     //and also deletes product_user columns associated with said user
     $sql = sprintf(
-        "DELETE FROM users INNER JOIN product_user WHERE users.id= product_user.user_id and users.id=$userId");
+        "DELETE FROM users INNER JOIN product_user WHERE users.id= product_user.user_id and users.id='$userId'");
     
     try{
         $result = mysqli_query($db, $sql);

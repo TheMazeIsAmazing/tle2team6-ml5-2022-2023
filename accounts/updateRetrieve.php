@@ -7,7 +7,7 @@ $userId = testInput('php://input', 'userId');
 
 //retrieves userdata from id
 $sql = sprintf( 
-    "SELECT * FROM users WHERE id =$userId");
+    "SELECT * FROM users WHERE id ='$userId'");
 
 try{
   $result = mysqli_query($db, $sql);

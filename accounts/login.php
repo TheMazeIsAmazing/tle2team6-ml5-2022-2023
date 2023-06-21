@@ -9,7 +9,7 @@ $password = testInput('php://input', 'password');
 
 if (isset($emailOrPhone)){ //validates login info, first checks if entered at all
     $sql = sprintf(
-        "SELECT * FROM users WHERE email=$emailOrPhone OR phone_number=$emailOrPhone"); //checks if it matches any users entry in the email OR phone column,
+        "SELECT * FROM users WHERE email='$emailOrPhone' OR phone_number='$emailOrPhone'"); //checks if it matches any users entry in the email OR phone column,
 
     //retrieves pw hash from returned data, verifies, 
     //and then returns email, phone, password to app for later auto-login

@@ -38,7 +38,7 @@ if (isset($userId) &&
         //retrieves pw hash from data, verifies against oldPassword, 
         //if success, makes sql request to update db
         $sql = sprintf(
-            "SELECT password FROM users WHERE id =$userId");
+            "SELECT password FROM users WHERE id ='$userId'");
 
         try{
             $result = mysqli_query($db, $sql);
