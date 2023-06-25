@@ -40,7 +40,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
 // A function to be called when the model has been loaded
 function ModelLoaded() {
-    loading.innerText = 'Model loaded!';
+    loading.innerText = 'Model geladen!';
 }
 
 const options = { numLabels: 9 };
@@ -53,7 +53,7 @@ const classifier = featureExtractor.classification(video, options, VideoReady);
 
 // A function to be called when the video is finished loading
 function VideoReady() {
-    videoStatus.innerText = 'Video ready!';
+    videoStatus.innerText = 'Video klaar!';
 }
 
 trainButton.onclick = function () {
@@ -61,9 +61,9 @@ trainButton.onclick = function () {
     classifier.train(function (lossValue) {
         if (lossValue) {
             totalLoss = lossValue;
-            loss.innerHTML = `Were training! Current Loss: ${totalLoss}`;
+            loss.innerHTML = `Waren aan het trainen! Huidig loss: ${totalLoss}`;
         } else {
-            loss.innerHTML = `Done Training! Final Loss: ${totalLoss}`;
+            loss.innerHTML = `Klaar met trainen! Laatste loss: ${totalLoss}`;
             document.getElementById('hidden-if-not-trained').style.display = 'block';
         }
     });
@@ -178,7 +178,7 @@ function TrainingSourceHandler(productInformation) {
             document.getElementById('u-did-it').style.display = 'block';
 
         } else {
-            alert('Please select at least one image file.');
+            alert('Selecteer ten minste één afbeeldingsbestand.');
         }
     }
 }
