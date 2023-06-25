@@ -7,6 +7,7 @@
     <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script type="module" src="../includes/js/classification.js"></script>
+    <script async src="../includes/js/check-login-handler.js"></script>
 
     <!-- Add Bootstrap JS (optional, for certain components) -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -25,7 +26,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Your FridgeFriend™</a>
+    <a class="navbar-brand" href="../">Your FridgeFriend™</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -45,16 +46,15 @@
     </div>
 </nav>
 <main>
-    <h2 class="mt-3">Classification Page</h2>
-    <h3>On this page you can see what the model sees</h3>
+    <h2 class="mt-3">Classificatie pagina</h2>
+    <h3>Op deze pagina kun je zien wat het model ziet</h3>
 
     <video id="video" width="200" height="200" autoplay class="mt-3"></video>
 
     <h6><span id="loading">Loading base model...</span> | <span id="video-status">Loading video...</span></h6>
-    <button id="start-stop-button" class="btn btn-primary mt-3">Start Classifying</button>
+    <button id="start-stop-button" class="btn btn-primary mt-3">Begin met classificeren</button>
     <p>
-        My guess is: <span id="result">...</span>
-        , with a confidence of <span id="confidence">...</span>.
+        Mijn gok is: <span id="result">...</span>, met een vertrouwen van <span id="confidence">...</span>.
     </p>
     <audio controls id="error-sound">
         <source src="../includes/sound-fx/invalid.mp3" type="audio/mpeg">
