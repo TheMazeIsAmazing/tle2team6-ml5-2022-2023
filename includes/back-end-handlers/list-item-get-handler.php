@@ -4,7 +4,7 @@ require_once '../db/db.php';
 
 // $userId = mysqli_escape_string($db, json_decode(file_get_contents('php://input'), true)['userId']); // Get the label from the POST request
 
-$query = "SELECT product_user.id, product_user.product_id, product_user.add_date, products.name, products.average_shelf_life
+$query = "SELECT product_user.id, product_user.product_id, product_user.add_date, product_user.expiration_date, products.name, products.average_shelf_life
 FROM product_user
 INNER JOIN products ON product_user.product_id=products.id
 WHERE product_user.user_id=1
@@ -16,8 +16,12 @@ try {
 
     if ($result) {
         while($row = $result->fetch_assoc()){
-            $newDate = date('d-m-Y', strtotime($row["add_date"]. ' +' .$row["average_shelf_life"]. ' days'));
-            $row["expiration_date"] = $newDate;
+            if($row["expiration_date"] == null){
+                $newDate = date('d-m-Y', strtotime($row["add_date"]. ' +' .$row["average_shelf_life"]. ' days'));
+                $row["expiration_date"] = $newDate;
+            } else {
+                $row["expiration_date"] = date('d-m-Y', strtotime($row["expiration_date"]));
+            }
             array_push($products, $row);
         }
         http_response_code(200); // Set HTTP response code to 200 (Success)
