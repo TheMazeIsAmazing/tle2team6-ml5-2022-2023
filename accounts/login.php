@@ -4,8 +4,8 @@ require_once  '../includes/db/db.php'; //database conn global file
 
 $defaultError = 'Validation attempt unsuccessful';
 
-$emailOrPhone = mysqli_escape_string($db, json_decode(file_get_contents('php://input'), true)['emailOrPhone']); // Get the label from the POST request
-$password = mysqli_escape_string($db, json_decode(file_get_contents('php://input'), true)['password']); // Get the label from the POST request
+$emailOrPhone = mysqli_escape_string($db, json_decode(file_get_contents('php://input'), true)['emailOrPhone']); // Get the email or phone number from the POST request
+$password = mysqli_escape_string($db, json_decode(file_get_contents('php://input'), true)['password']); // Get the password from the POST request
 
 
 if (isset($emailOrPhone)){ //validates login info, first checks if entered at all
