@@ -1,4 +1,4 @@
-document.getElementById('login').addEventListener('submit', LogTheFuckIn);
+document.getElementById('login').addEventListener('submit', LogIn);
 
 function SaveLoginLocal(response) {
     let today = new Date();
