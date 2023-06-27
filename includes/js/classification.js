@@ -25,9 +25,9 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
 // A function to be called when the model has been loaded
 function ModelLoaded() {
-    loading.innerText = 'Model loaded!';
+    loading.innerText = 'Model geladen!';
     classifier.load('./model/model.json', function () {
-        loading.innerText = 'Model and custom model loaded!';
+        loading.innerText = 'Model en aangepast model geladen!';
         startStopButton.addEventListener('click', ToggleClassification);
     });
 }
@@ -35,24 +35,27 @@ function ModelLoaded() {
 function ToggleClassification() {
     if (classifying) {
         classifying = false;
-        startStopButton.innerHTML = 'Start Classifying';
+        startStopButton.innerHTML = 'Begin met classificeren';
         startStopButton.classList.replace('btn-danger', 'btn-primary');
     } else {
         classifying = true;
-        startStopButton.innerHTML = 'Stop Classifying';
+        startStopButton.innerHTML = 'Stop met classificeren';
         startStopButton.classList.replace('btn-primary', 'btn-danger');
         classifier.classify(GotResults);
     }
 }
 
+const options = { numLabels: 9 };
+
 // Extract the already learned features from MobileNet
 const featureExtractor = ml5.featureExtractor('MobileNet', ModelLoaded);
 // Create a new classifier using those features
-const classifier = featureExtractor.classification(video, VideoReady);
+const classifier = featureExtractor.classification(video, options, VideoReady);
+
 
 // A function to be called when the video is finished loading
 function VideoReady() {
-    videoStatus.innerText = 'Video ready!';
+    videoStatus.innerText = 'Video klaar!';
 }
 
 // Show the results
@@ -90,13 +93,14 @@ function GotResults(err, results) {
 
 function UpdateDatabase(label) {
     const url = '../includes/back-end-handlers/recognition-handler.php';
-
+    let json = JSON.parse(localStorage.getItem('loggedInUser'))
+    let userId = json.id
     fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ label: label }),
+        body: JSON.stringify({ label: label, userId: userId }),
     })
         .then(response => {
             if (response.ok) {
