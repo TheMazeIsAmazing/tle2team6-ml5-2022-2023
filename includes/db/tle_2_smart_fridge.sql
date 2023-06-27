@@ -152,7 +152,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `phone_number`, `password`, `family_size`, `role`) VALUES
-(1, 'name@example.com', '0612345678', 'secure', NULL, NULL);
+(1, 'name@example.com', '0612345678', '$2y$10$cHIOYNzEdlTkcATtEEBj/OOr1ca2701NB8Z0isDaDsrDd.Kh7FC6G', NULL, NULL);
 
 --
 -- Indexes for dumped tables

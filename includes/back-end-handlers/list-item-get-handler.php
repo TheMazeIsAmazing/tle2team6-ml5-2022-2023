@@ -4,7 +4,8 @@ require_once '../db/db.php';
 
 // $userId = mysqli_escape_string($db, json_decode(file_get_contents('php://input'), true)['userId']); // Get the label from the POST request
 
-$query = "SELECT product_user.id, product_user.product_id, product_user.add_date, product_user.expiration_date, products.name, products.average_shelf_life
+
+$query = "SELECT product_user.id, product_user.product_id, product_user.add_date, product_user.expiration_date, products.name, products.average_shelf_life, products.image
 FROM product_user
 INNER JOIN products ON product_user.product_id=products.id
 WHERE product_user.user_id=1
@@ -22,6 +23,10 @@ try {
             } else {
                 $row["expiration_date"] = date('d-m-Y', strtotime($row["expiration_date"]));
             }
+            // Convert BLOB image data to base64-encoded string
+            $imageData = base64_encode($row["image"]);
+            $row["image"] = $imageData;
+
             array_push($products, $row);
         }
         http_response_code(200); // Set HTTP response code to 200 (Success)
